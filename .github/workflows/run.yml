@@ -24,4 +24,4 @@ jobs:
         run: |
           jupyter nbconvert --to notebook --execute --inplace GoogleTrendingSearch.ipynb
         env:
-          AIRTABLE_API_KEY: ${{ secrets.patDAyUppA2BzwEe9.cd5f34a1c0d1a177d67c446494c2bcea941565dd625d0288e9ba6a71dcc709c8 }}
+          AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
