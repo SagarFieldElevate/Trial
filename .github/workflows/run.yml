@@ -1,1 +1,29 @@
+name: Run Notebook
 
+on:
+  schedule:
+    - cron: '0 * * * *'  # every hour
+  workflow_dispatch:
+
+jobs:
+  execute-notebook:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install jupyter nbconvert
+
+      - name: Execute notebook
+        run: |
+          jupyter nbconvert --to notebook --execute --inplace GoogleTrendingSearch.ipynb
+        env:
+          AIRTABLE_API_KEY: ${{ secrets.patDAyUppA2BzwEe9.cd5f34a1c0d1a177d67c446494c2bcea941565dd625d0288e9ba6a71dcc709c8 }}
