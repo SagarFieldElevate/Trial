@@ -2,15 +2,20 @@ name: Auto Run Trending Script
 
 on:
   schedule:
-    - cron: '0 12 * * *'  # Runs every day at 12:00 UTC
-  workflow_dispatch:  # Manual trigger
+    - cron: '0 * * * *'  # Every hour
+  workflow_dispatch:
 
 jobs:
-  run-trending-script:
+  run-notebook:
     runs-on: ubuntu-latest
 
+    env:
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -19,10 +24,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install requests pandas openpyxl
+          pip install -r requirements.txt || pip install pandas requests openpyxl nbconvert nbformat
 
-      - name: Run Python Script
-        run: python run_trending_script.py
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+      - name: Run notebook
+        run: |
+          jupyter nbconvert --to notebook --execute GoogleTrendingSearch.ipynb --output executed_notebook.ipynb
